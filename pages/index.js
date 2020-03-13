@@ -1,5 +1,11 @@
+import Layout from '../components/Layout'
+
 function App() {
-  return <div> Next.js!</div>
+  return (
+    <Layout>
+      <div> Next.js!</div>
+    </Layout>
+  )
 }
 
 export default App
