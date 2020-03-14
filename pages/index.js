@@ -1,9 +1,11 @@
+import Link from 'next/link';
+
 import Layout from '../components/Layout'
 
 function App() {
   return (
     <Layout>
-      <div> Next.js!</div>
+      <Link href='/submit'>Here's how to submit your work.</Link>
     </Layout>
   )
 }
