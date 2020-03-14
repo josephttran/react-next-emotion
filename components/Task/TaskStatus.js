@@ -20,6 +20,7 @@ const TaskStatus = ({checklist}) => {
   const finished = () => completed().length == checklist.length;
 
   const isFinished = finished();
+
   if (isFinished) {
     return (
       <Status>
