@@ -1,7 +1,13 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx, Global } from '@emotion/core';
 
 import Header from './Header';
+
+const reset = css`
+  body {
+    margin: 0;
+  }
+`
 
 const layout = css`
   min-height: 100vh;
@@ -11,13 +17,18 @@ const layout = css`
   max-width: 560px;
   margin: 0 auto;
   padding: 20px;
+  label: layout;
 `
+
 const Layout = props => {
   return (
-    <div css={layout}>
-      <Header />
-      {props.children}
-    </div>
+    <div id="__layout">
+      <Global styles={reset} />
+      <div css={layout}>
+        <Header />
+        {props.children}
+      </div>       
+    </div>   
   );
 };
 
