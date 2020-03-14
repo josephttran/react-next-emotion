@@ -4,8 +4,15 @@ import { css, jsx, Global } from '@emotion/core';
 import Header from './Header';
 
 const reset = css`
-  body {
+  *, *::after, *::before {
+    box-sizing: border-box;
     margin: 0;
+  }
+  html {
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.4;
   }
 `
 
