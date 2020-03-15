@@ -1,38 +1,71 @@
-import { useState, useEffect } from 'react';
-
-import Link from 'next/link';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import styled from '@emotion/styled';
+import Link from 'next/link';
+import { useState, useEffect, useRef } from 'react';
+
+const transitionTime = '.4';
 
 const Status = styled.div`
   label: status;
   font-weight: 700;
   margin-top: 20px;
+  transition: opacity ${transitionTime}s;
 `
 
 const TaskStatus = ({checklist}) => {
+  const submitLinkRef = useRef(null);
+  const completeRef = useRef(null);
+  const [isFinished, setIsFinished] = useState(false);
   const [numberCompleted, setNumberCompleted] = useState();
 
   useEffect(() => {
     setNumberCompleted(completed().length);
+
+    if(finished()) {
+      transitionFadeInOut(completeRef, submitLinkRef, parseInt(transitionTime) * 1000);
+      setIsFinished(true);
+    } else if (isFinished && completed().length + 1 == checklist.length) {
+      transitionFadeInOut(submitLinkRef, completeRef, parseInt(transitionTime) * 1000);
+      setIsFinished(false);
+    } else {
+      submitLinkRef.current.style.display = 'none';
+    }
   }, [checklist]);
 
   const completed = () => checklist.filter(ele => ele.completed == true);
   const finished = () => completed().length == checklist.length;
 
-  const isFinished = finished();
+  const transitionFadeInOut = (outRef, inRef, outTransitionTime) => {
+    inRef.current.style.display = 'none';
+    outRef.current.style.opacity = 0;
 
-  if (isFinished) {
-    return (
-      <Status>
+    setTimeout(() => {
+      outRef.current.style.display = 'none';
+      inRef.current.style.display = 'block';
+      inRef.current.style.visibility = 'hidden';
+      inRef.current.style.opacity = 0;
+      inRef.current.style.visibility = 'visible';
+
+      setTimeout(() => {
+        inRef.current.style.opacity = 1;
+      }, 400);
+    }, outTransitionTime);
+  }
+
+  return (
+    <>
+      <Status ref={completeRef}>
+        Complete {numberCompleted} / {checklist.length}
+      </Status>
+      <Status ref={submitLinkRef}>
         That's it!&nbsp;
         <Link href='/submit'>
           <a>Here's how to submit your work.</a>
         </Link> 
-      </Status> 
-    )
-  }
-
-  return <Status>Complete { numberCompleted } / { checklist.length }</Status>
+      </Status>
+    </>
+  )
 }
 
 export default TaskStatus;
