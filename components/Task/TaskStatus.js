@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 
 const transitionTime = '.4';
 
@@ -18,23 +18,22 @@ const TaskStatus = ({checklist}) => {
   const completeRef = useRef(null);
   const [isFinished, setIsFinished] = useState(false);
   const [numberCompleted, setNumberCompleted] = useState();
+  const completed = useMemo(() => checklist.filter(ele => ele.completed == true), [checklist]);
+  const finished = useMemo(() => completed.length == checklist.length, [checklist]);
 
   useEffect(() => {
-    setNumberCompleted(completed().length);
+    setNumberCompleted(completed.length);
 
-    if(finished()) {
+    if(finished) {
       transitionFadeInOut(completeRef, submitLinkRef, parseInt(transitionTime) * 1000);
       setIsFinished(true);
-    } else if (isFinished && completed().length + 1 == checklist.length) {
+    } else if (isFinished && completed.length + 1 == checklist.length) {
       transitionFadeInOut(submitLinkRef, completeRef, parseInt(transitionTime) * 1000);
       setIsFinished(false);
     } else {
       submitLinkRef.current.style.display = 'none';
     }
   }, [checklist]);
-
-  const completed = () => checklist.filter(ele => ele.completed == true);
-  const finished = () => completed().length == checklist.length;
 
   const transitionFadeInOut = (outRef, inRef, outTransitionTime) => {
     inRef.current.style.display = 'none';
