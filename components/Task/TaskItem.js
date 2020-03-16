@@ -2,6 +2,8 @@
 import { jsx } from '@emotion/core';
 import styled from '@emotion/styled';
 
+import Unorphan from '../Unorphan/Unorphan';
+
 const Item = styled.li`
   label: task;
   margin-top: 5px;
@@ -39,7 +41,9 @@ const TaskItem = ({task, setChecklist}) => {
   }
 
   return (
-    <Item onClick={handleClick} className={task.completed ? "complete" : ""}>{task.message}</Item>
+    <Item onClick={handleClick} className={task.completed ? "complete" : ""}>
+      <Unorphan text={[task.message]} />
+    </Item>
   )
 }
 
